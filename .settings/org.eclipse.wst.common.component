@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-modules id="moduleCoreId" project-version="1.5.0">
+    <wb-module deploy-name="TruConnect-Tools">
+        <wb-resource deploy-path="/" source-path="/WebContent" tag="defaultRootSource"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/WebContent/WEB-INF/resources"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/WebContent/applicationContext"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/billing_balance"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/WebContent/WEB-INF/applicationContext"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src_util"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src_billing_balance"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src_users"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src_general"/>
+        <property name="context-root" value="TruConnect-Tools"/>
+        <property name="java-output-path" value="/TruConnect-Tools/build/classes"/>
+    </wb-module>
+</project-modules>

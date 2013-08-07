@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+  xmlns:jee="http://www.springframework.org/schema/jee"
+  xmlns:tx="http://www.springframework.org/schema/tx"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans 
+  http://www.springframework.org/schema/beans/spring-beans.xsd
+  http://www.springframework.org/schema/tx 
+  http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+  http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee.xsd">
+
+  <tx:annotation-driven proxy-target-class="false"/>
+  <!--  <jee:jndi-lookup id="dataSourceMySql" jndi-name="jdbc/TrcMySql" />
+  <jee:jndi-lookup id="dataSourceOracle" jndi-name="jdbc/TSCPMVNA-k11mvnot" />
+  -->
+  <bean id="dataSourceMySql" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+     <property name="driverClassName" value="com.mysql.jdbc.Driver" />
+     <property name="url" value="jdbc:mysql://209.127.228.63:3306/TSCPMVNA" />
+     <property name="username" value="root" />
+     <property name="password" value="fr33wi11y" />
+  </bean>
+  
+   <bean id="dataSourceOracle" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+     <property name="driverClassName" value="oracle.jdbc.driver.OracleDriver" />
+     <!-- <property name="url" value="jdbc:oracle:thin:@uscaelmux18:1521:K11MVNO" />-->
+     <property name="url" value="jdbc:oracle:thin:@uscael200:1521/K11MVNOT" />
+     <property name="username" value="TSCPMVNA" />
+     <property name="password" value="TSCPMVNA" />
+  </bean>
+  
+  <bean id="sessionFactoryMySql" class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
+    <property name="dataSource" ref="dataSourceMySql" />
+    <property name="annotatedClasses">
+      <list>
+        <value>com.tscp.toolkit.domain.user.User</value>
+        <value>com.tscp.toolkit.domain.authority.Authority</value>
+      </list>
+    </property>
+    <property name="hibernateProperties">
+      <props>
+        <!-- <prop key="hibernate.connection.url">jdbc:mysql://209.127.228.50:3306/truconnect</prop>
+        <prop key="hibernate.connection.password">fr33wi11y</prop>
+        <prop key="hibernate.connection.username">root</prop>
+        <prop key="hibernate.connection.url">jdbc:mysql://localhost:3306/truconnect</prop>
+        <prop key="hibernate.connection.password">admin</prop>
+        <prop key="hibernate.connection.driver_class">com.mysql.jdbc.Driver</prop>-->            
+        <prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
+        <prop key="hibernate.cache.provider_class">org.hibernate.cache.NoCacheProvider</prop>
+        <prop key="hibernate.show_sql">false</prop>
+        <prop key="hibernate.format_sql">true</prop>
+        <prop key="hibernate.use_sql_comments">${hibernate.use_sql_comments}</prop>
+        <prop key="hibernate.current_session_context_class">thread</prop>
+        <prop key="hibernate.transaction.factory_class">org.hibernate.transaction.JDBCTransactionFactory</prop>
+     </props>
+    </property>
+  </bean>
+   
+  <bean id="sessionFactoryOracle" class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
+    <property name="dataSource" ref="dataSourceOracle" />
+    <property name="annotatedClasses">
+      <list>
+        <value>com.tscp.toolkit.domain.billing.Invoice</value>
+        <value>com.tscp.toolkit.domain.billing.InvoiceDetail</value>
+        <value>com.tscp.toolkit.domain.billing.TcMobMins</value>
+        <value>com.tscp.toolkit.domain.billing.BmfMvno</value>
+        <value>com.tscp.toolkit.domain.billing.CmfMvno</value>
+        <value>com.tscp.toolkit.domain.billing.ChargeHistory</value>
+        <value>com.tscp.toolkit.domain.usage.AmsBilled</value>
+        <value>com.tscp.toolkit.domain.usage.AmsProd</value>  
+        <value>com.tscp.toolkit.domain.device.DeviceInfo</value>  
+        <value>com.tscp.toolkit.domain.balance.BalanceAudit</value>   
+      </list>
+    </property>
+    <property name="hibernateProperties">
+      <props>
+        <!-- <prop key="hibernate.connection.url">jdbc:oracle:thin:@uscael200:1521:K11MVNOT</prop>
+        <prop key="hibernate.connection.url">jdbc:oracle:thin:@uscaelmux18:1521:K11MVNO</prop>
+        <prop key="hibernate.connection.password">TSCPMVNA</prop>
+        <prop key="hibernate.connection.username">TSCPMVNA</prop>
+        <prop key="hibernate.connection.driver_class">oracle.jdbc.driver.OracleDriver</prop>-->            
+        <prop key="hibernate.dialect">org.hibernate.dialect.OracleDialect</prop>
+        <prop key="hibernate.cache.provider_class">org.hibernate.cache.NoCacheProvider</prop>
+        <prop key="hibernate.show_sql">false</prop>
+        <prop key="hibernate.format_sql">true</prop>
+        <prop key="hibernate.current_session_context_class">thread</prop>
+        <prop key="hibernate.transaction.factory_class">org.hibernate.transaction.JDBCTransactionFactory</prop>
+      </props>
+    </property>
+  </bean>
+    
+  <bean id="transactionInterceptor" class="org.springframework.transaction.interceptor.TransactionInterceptor">
+    <property name="transactionManager" ref="transactionManager" />
+    <property name="transactionAttributes">
+      <props>
+        <prop key="save">PROPAGATION_REQUIRED</prop>
+      </props>
+    </property>
+  </bean>
+
+  <bean id="transactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+    <property name="dataSource" ref="dataSourceMySql" />
+    <property name="sessionFactory" ref="sessionFactoryMySql" />
+  </bean>
+  
+  <bean id="transactionManager1" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+    <property name="dataSource" ref="dataSourceOracle" />
+    <property name="sessionFactory" ref="sessionFactoryOracle" /> 
+  </bean>
+  
+  <bean id="hibernateTemplateMySql" class="org.springframework.orm.hibernate3.HibernateTemplate">
+    <property name="sessionFactory" ref="sessionFactoryMySql" />
+  </bean>
+  
+  <bean id="hibernateTemplateOracle" class="org.springframework.orm.hibernate3.HibernateTemplate">
+    <property name="sessionFactory" ref="sessionFactoryOracle" />
+  </bean>
+
+</beans>
