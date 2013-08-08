@@ -31,7 +31,7 @@ public class UserValidator implements Validator {
     User user = (User) target;
     //checkUsername(user, errors);
    
-    validateEmail(user.getEmail(), errors);
+    //validateEmail(user.getEmail(), errors);
     
     if("updatePassword".equalsIgnoreCase(user.getAction())) {
         validatePassword(user.getPassword(), errors);

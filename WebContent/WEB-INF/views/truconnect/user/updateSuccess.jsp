@@ -12,5 +12,6 @@
   <c:if test="${key != 'password'}">
      <h3 style="margin-bottom: 10px; padding-bottom: 0px;">New ${key} : ${value}</h3>   
   </c:if>    
+  <a href="<spring:url value="/truconnect/index"/>">Toolkit Menu</a>
 </body>
 </html>
